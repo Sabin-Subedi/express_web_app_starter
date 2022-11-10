@@ -5,16 +5,35 @@ import compression from 'compression';
 import { createHttpTerminator } from 'http-terminator';
 import helmet from 'helmet';
 import createError from 'http-errors';
-import router from './src/routes/main.router';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
+
+const env = process.env.NODE_ENV || 'development';
+
+// local files import
+import config from './src/config/index.js';
+import './src/config/passport.js';
+import authRouter from './src/routes/auth.js';
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({
+  path: `./.env.${env.toLowerCase()}`,
+});
 
 // Create Express server
 const app = express();
+app.use(
+  express.json({
+    limit: config.payloadLimit,
+  }),
+);
+app.use(passport.initialize());
 
 // x-powered-by header banner
 app.disable('x-powered-by');
+
+// cookie parsing middleware that returns parsed cookie in req.cookies
+app.use(cookieParser(config.cookieSecret));
 
 // middleware
 app.use(compression());
@@ -34,7 +53,7 @@ const server = app.listen(PORT, () => {
   console.log('Press CTRL-C to stop');
 });
 
-app.use(router);
+app.use('/api/', authRouter);
 
 // 404 handler
 app.use((req, res, next) => {

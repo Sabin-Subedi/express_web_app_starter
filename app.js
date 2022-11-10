@@ -5,6 +5,8 @@ import compression from 'compression';
 import { createHttpTerminator } from 'http-terminator';
 import helmet from 'helmet';
 import createError from 'http-errors';
+import cors from 'cors';
+
 import router from './src/routes/main.router.js';
 
 // defining the port to run the server
@@ -21,6 +23,23 @@ const app = express();
 
 // x-powered-by header banner
 app.disable('x-powered-by');
+
+// cors configuration
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (process.env.CORS_WHITELIST.split(',').includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new createError(403, 'Not allowed by CORS'));
+      }
+    },
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }),
+);
 
 // middleware
 app.use(compression());

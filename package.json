@@ -5,8 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "node  app.js",
-    "dev": "node --watch app.js"
+    "start": "NODE_ENV=production node app.js",
+    "dev": "NODE_ENV=development node --watch app.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

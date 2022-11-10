@@ -5,10 +5,14 @@ import compression from 'compression';
 import { createHttpTerminator } from 'http-terminator';
 import helmet from 'helmet';
 import createError from 'http-errors';
-import router from './src/routes/main.router';
+import router from './src/routes/main.router.js';
+
+const env = process.env.NODE_ENV;
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({
+  path: env ? `./.env.${env}` : './.env',
+});
 
 // Create Express server
 const app = express();

@@ -7,11 +7,13 @@ import helmet from 'helmet';
 import createError from 'http-errors';
 import router from './src/routes/main.router.js';
 
-const env = process.env.NODE_ENV;
+// defining the port to run the server
+const PORT = process.env.PORT || 8000;
+const ENV = process.env.NODE_ENV;
 
 // Load environment variables from .env file
 dotenv.config({
-  path: env ? `./.env.${env}` : './.env',
+  path: ENV ? `./.env.${ENV}` : './.env',
 });
 
 // Create Express server
@@ -27,10 +29,6 @@ app.use(compression());
 app.use(helmet());
 
 // routing middleware in express
-
-// defining the port to run the server
-const PORT = process.env.PORT || 8000;
-const ENV = process.env.NODE_ENV;
 
 // running express application on the port defined in env or 8000
 const server = app.listen(PORT, () => {

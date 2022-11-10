@@ -64,3 +64,8 @@ process.on('SIGTERM', async () => {
   console.log('SIGTERM signal received: closing HTTP server');
   await httpTerminator.terminate();
 });
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT signal received: closing HTTP server');
+  await httpTerminator.terminate();
+});

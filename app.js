@@ -5,6 +5,7 @@ import compression from 'compression';
 import { createHttpTerminator } from 'http-terminator';
 import helmet from 'helmet';
 import createError from 'http-errors';
+import router from 'routes/main.router';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -33,6 +34,8 @@ const server = app.listen(PORT, () => {
   console.log('Press CTRL-C to stop');
 });
 
+app.use(router);
+
 // 404 handler
 app.use((req, res, next) => {
   next(new createError.NotFound());
@@ -55,6 +58,7 @@ app.use((err, req, res, next) => {
 // implements logic for gracefully terminating an express.js server.
 const httpTerminator = createHttpTerminator({ server });
 
-// setTimeout(() => {
-//   httpTerminator.terminate();
-// }, 1000);
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  await httpTerminator.terminate();
+});

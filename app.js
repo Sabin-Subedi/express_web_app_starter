@@ -5,7 +5,7 @@ import compression from 'compression';
 import { createHttpTerminator } from 'http-terminator';
 import helmet from 'helmet';
 import createError from 'http-errors';
-import router from 'routes/main.router';
+import router from './src/routes/main.router';
 
 // Load environment variables from .env file
 dotenv.config();

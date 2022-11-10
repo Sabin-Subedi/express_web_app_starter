@@ -8,6 +8,7 @@ import createError from 'http-errors';
 import cors from 'cors';
 
 import router from './src/routes/main.router.js';
+import config from './src/config/config.js';
 
 // defining the port to run the server
 const PORT = process.env.PORT || 8000;
@@ -28,7 +29,7 @@ app.disable('x-powered-by');
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (process.env.CORS_WHITELIST.split(',').includes(origin)) {
+      if (config.cors_whitelist.includes(origin)) {
         callback(null, true);
       } else {
         callback(new createError(403, 'Not allowed by CORS'));

@@ -22,6 +22,12 @@ dotenv.config({
 // Create Express server
 const app = express();
 
+// Helmet helps you secure your Express apps by setting various HTTP headers
+app.use(helmet());
+
+// middleware
+app.use(compression());
+
 // x-powered-by header banner
 app.disable('x-powered-by');
 
@@ -42,21 +48,14 @@ app.use(
   }),
 );
 
-// middleware
-app.use(compression());
-
-// Helmet helps you secure your Express apps by setting various HTTP headers
-app.use(helmet());
-
 // routing middleware in express
+app.use(router);
 
 // running express application on the port defined in env or 8000
 const server = app.listen(PORT, () => {
   console.log(`App is running at http://localhost:${PORT} in ${ENV} mode`);
   console.log('Press CTRL-C to stop');
 });
-
-app.use(router);
 
 // 404 handler
 app.use((req, res, next) => {
